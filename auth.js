@@ -18,34 +18,22 @@ module.exports.createAccessToken = (user) => {
 };
 
 
-// Token Verification
-
-/*
-	Analogy
-		Receive the gift and open the lock using the secret key to verify if the sender(client who sends the request) is legitimate and if the gift was not tampered.
-
-*/
-
 module.exports.verify = (req, res, next) => {
 	console.log(req.headers.authorization);
 
-	// req.headers.authorization - contains sensitive data and especially our token.
+	
 	let token = req.headers.authorization;
 
-	// This if statement will check if the token variable contains undefined or a proper jwt. If it is undefined, we will check the data type of the token with the typeof keyword, then send the message back to the client.
+	
 	if(typeof token === "undefined") {
 		return res.send({auth: "Failed. No Token received."});
 	} else {
-		console.log(token);
-		// Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YTc2NTgwZmMzN2YzZDNkOTMwY2Y2NCIsImVtYWlsIjoiamFtZXNAbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjg4Njk0OTk1fQ.KzO6qFFQnH_iqAltp4rAs1EH2Dpo_Fbi66Npvn_RuwQ
+		
 		token = token.slice(7, token.length);
 
-		console.log(token);
-		//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YTc2NTgwZmMzN2YzZDNkOTMwY2Y2NCIsImVtYWlsIjoiamFtZXNAbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjg4Njk0OTk1fQ.KzO6qFFQnH_iqAltp4rAs1EH2Dpo_Fbi66Npvn_RuwQ
-		// The "Bearer " was sliced afterwards
+		
 	}
-
-	// Token decryption
+	
 	jwt.verify(token, secret, function(err, decodedToken) {
 		if(err) {
 			return res.send({
@@ -53,7 +41,6 @@ module.exports.verify = (req, res, next) => {
 				message: err.message
 			});
 		} else {
-			console.log(decodedToken);
 
 			req.user = decodedToken;
 			next();
